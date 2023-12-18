@@ -8,7 +8,7 @@
 
 class BasicEntity: public Entity
 {
-public:
+	public:
 	BasicEntity(): Entity() { };
 	virtual ~BasicEntity() { };
 

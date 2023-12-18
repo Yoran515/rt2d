@@ -31,7 +31,7 @@ public:
 	virtual void update(float deltaTime);
 
 private:
-	MyEntity* myentity;
+	MyEntity * myentity;
 	BasicEntity* test;
 };
 

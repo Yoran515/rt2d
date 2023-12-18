@@ -17,7 +17,7 @@ OPTION(MAKE_COLLISION "Make Collision application" ON)
 OPTION(MAKE_DEBUGDRAW "Make DebugDraw application" ON)
 OPTION(MAKE_RAYCAST "Make Raycast application" ON)
 OPTION(MAKE_MATRIXPIXEL "Make MatrixPixel application" ON)
-
+OPTION(MAKE_PACLOCAL "Make application for PacLocal" ON)
 OPTION(USE_RS232 "Use RS232 library" OFF)
 OPTION(MAKE_SERIAL "Make serial application" OFF)
 
@@ -165,6 +165,32 @@ IF(MAKE_START)
 	# Copy assets to the build directory
 	file(
 		COPY start/assets
+		DESTINATION ${CMAKE_BINARY_DIR}
+	)
+ENDIF()
+
+###################################################################
+# PacLocal                                                        #
+###################################################################
+IF(MAKE_PACLOCAL)
+	add_executable(PacLocal
+		PacLocal/main.cpp
+		PacLocal/Scene_PacLocal.cpp
+		PacLocal/Scene_PacLocal.h
+		PacLocal/Player.h
+		PacLocal/Player.cpp
+		PacLocal/Player2.h
+		PacLocal/Player2.cpp
+		PacLocal/collider_Pacman.h
+		PacLocal/Cell.cpp
+		PacLocal/Cell.h
+	)
+	target_link_libraries(PacLocal
+		${ALL_GRAPHICS_LIBS}
+	)
+	# Copy assets to the build directory
+	file(
+		COPY PacLocal/assets
 		DESTINATION ${CMAKE_BINARY_DIR}
 	)
 ENDIF()

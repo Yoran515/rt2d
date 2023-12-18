@@ -5,6 +5,7 @@
 
 #include "cube.h"
 
+
 class BasicEntity: public Entity
 {
 public:
@@ -25,7 +26,7 @@ public:
 private:
 	std::vector<Cube*> cubes;
 	Timer t;
-	BasicEntity* entity;
+	BasicEntity * entity;
 	void fpsCam(float deltaTime);
 };
 
