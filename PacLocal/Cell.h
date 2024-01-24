@@ -7,7 +7,7 @@
 class Cell: public Entity
 {
 	public:
-		Cell();
+		Cell(int type);
 		virtual ~Cell();
 
 		void update(float deltaTime);

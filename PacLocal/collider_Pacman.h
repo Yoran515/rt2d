@@ -37,6 +37,13 @@ public:
 		    rect1.y < rect2.y + rect2.height &&
 		    rect1.y + rect1.height > rect2.y);
 	}
+	static bool rectangle3rectangle(const Rectangle& rect1, const Rectangle& rect3) 
+    {
+		return (rect1.x < rect3.x + rect3.width &&
+		    rect1.x + rect1.width > rect3.x &&
+		    rect1.y < rect3.y + rect3.height &&
+		    rect1.y + rect1.height > rect3.y);
+	}
 private:
 	// Disallow creating an instance of this object
 	Collider() {}
