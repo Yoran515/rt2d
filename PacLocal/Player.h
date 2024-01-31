@@ -4,6 +4,8 @@
 
 #include <rt2d/entity.h>
 
+
+
 class Player: public Entity
 {
 	public:
@@ -11,7 +13,7 @@ class Player: public Entity
 		virtual ~Player();
 
 		void update(float deltaTime);
-
+		
 	private:
 
 };

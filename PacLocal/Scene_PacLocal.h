@@ -18,10 +18,13 @@ public:
 	virtual ~Scene_PacLocal();
 	
 	void update(float deltaTime);
-
+	void Player1_Move(float deltaTime);
+	void Player2_Move(float deltaTime);
+	void Game_Reset();
 private:
 
 	Player * Pacman;
+
 	Player2 * Ghost;
 	Text* text;
 	std::vector<Cell*> grid;

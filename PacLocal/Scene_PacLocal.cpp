@@ -59,6 +59,7 @@ Scene_PacLocal::Scene_PacLocal() : Scene()
     }
 	//PACMAN
 	
+
 	
 	Pacman = new Player();
 	this->addChild(Pacman);
@@ -95,286 +96,271 @@ void Scene_PacLocal::update(float deltaTime)
 
 	Rectangle rect1 = Rectangle(Pacman->position.x, Pacman->position.y, 32, 32);
 	Rectangle rect2 = Rectangle(Ghost->position.x, Ghost->position.y, 32, 32);
-	// Rectangle rect3 = Rectangle(grids->position.x,grids->position.y, 32,32);
 
-	// std::cout 
-	
-	std::cout << Move_Time_Pacman;
-	std::cout << "   ";
+	// std::cout << Move_Time_Pacman;
+	// std::cout << "   ";
 	
 	if( Collider::rectangle2rectangle(rect1, rect2)) 
 	{
+		if(lost == false)
+		{
 		text = new Text();
-		text->message("Player 1 Lost :(");
+		text->message("Player 1 Lost :(",RED);
 		text->scale = Point2(0.5f, 0.5f);
+	
 		text->position = Point2(500, 50);
 		this ->addChild(text);
+		}
+		
 		lost = true;
 	}
+
+	Game_Reset();
+
+	if(lost ==false)
+	{
+		Player1_Move(deltaTime);
+		Player2_Move(deltaTime);
+		
+	}
+
 	if (input()->getKeyDown(KeyCode::Escape)) 
 	{
 		this->stop();
 	}
-	
-// 													PACMAN
-// ___________________________________________________________________________________________________________________________________
-	// MOVEMENT PACMAN
-	if(lost == false)
+
+}
+		
+	// 													PACMAN
+	// ___________________________________________________________________________________________________________________________________
+		// MOVEMENT PACMAN
+void Scene_PacLocal::Player1_Move(float deltaTime)
+{
+	if (moving_Player1 == true)
 	{
-		 if (moving_Player1 == true)
-		{
 		Pacman-> position.y += 32;;
-		}
-			
-		if(Move_Time_Pacman > MAX_TIME)
-		{
+	}
+		
+	if(Move_Time_Pacman > MAX_TIME)
+	{
+			Move_Time_Pacman = 0;
+		
+	}
+
+	if(PAC_Move_down == true)
+	{
+			if(Move_Time_Pacman >= MaxTime)
+			{
+
+				Pacman-> position.y += 32;
 				Move_Time_Pacman = 0;
 			}
-		}
-		// if (moving_Player2 == true)
-		// {
-		// 	Move_Time_Ghost +=	Ghost_Speed * deltaTime;
 			
-		// 	if(Move_Time_Ghost > MAX_TIME)
-		// 	{
-		// 		Move_Time_Ghost = 0;
-		// 	}
-		// }
+		
+	}
+	if(PAC_Move_up == true)
+	{
+		if(Move_Time_Pacman >= MaxTime)
+		{
+
+		Pacman-> position.y -= 32;
+		Move_Time_Pacman = 0;
+		}
+				
+	}
+	if(PAC_Move_right == true)
+	{
+		if(Move_Time_Pacman >= MaxTime)
+		{
+			Pacman-> position.x += 32;
+			Move_Time_Pacman = 0;
+		}
 
 		
-		if(PAC_Move_down == true)
-		{
-			if(Move_Time_Pacman >= MaxTime)
-			{
-			// timer += Speed * deltaTime;
-			Pacman-> position.y += 32;
-			Move_Time_Pacman = 0;
-			}
-		}
-		if(PAC_Move_up == true)
-		{
-			if(Move_Time_Pacman >= MaxTime)
-			{
-			// timer += Speed * deltaTime;
-			Pacman-> position.y -= 32;
-			Move_Time_Pacman = 0;
-			}
-					
-		}
-		if(PAC_Move_right == true)
-		{
-			if(Move_Time_Pacman >= MaxTime)
-			{
-				Pacman-> position.x += 32;
-				Move_Time_Pacman = 0;
-			}
-			// timer += Speed * deltaTime;
-			
 
+	}
+	if(PAC_Move_left == true)
+	{
+		if(Move_Time_Pacman >= MaxTime)
+		{	
+		Pacman-> position.x -= 32;
+		Move_Time_Pacman = 0;
 		}
-		if(PAC_Move_left == true)
+	
+	}
+
+
+	if (input()->getKeyDown(KeyCode::Up)) 
+	{
+		PAC_up = true;
+		PAC_down = false;
+		PAC_right =false;
+		PAC_left = false;
+	}
+
+	if (input()->getKeyDown(KeyCode::Down)) 
+	{
+		PAC_up = false;
+		PAC_down = true;
+		PAC_right =false;
+		PAC_left = false;
+	}
+
+	if (input()->getKeyDown(KeyCode::Left)) 
+	{
+		PAC_up = false;
+		PAC_down = false;
+		PAC_right =false;
+		PAC_left = true;
+	}
+
+	if (input()->getKeyDown(KeyCode::Right)) 
+	{
+		PAC_up = false;
+		PAC_down = false;
+		PAC_right =true;
+		PAC_left = false;
+	}
+
+	if(PAC_up == true)
+	{
+		Move_Time_Pacman +=speed_Pacman *deltaTime;
+
+			if(Pacman->position.y > 30)
+			{
+				if(Move_Time_Pacman >= 1)
+				{
+
+				Pacman-> position.y -= 32;
+				Move_Time_Pacman = 0;
+				}
+			}
+
+	}
+	
+	if(PAC_down == true)
+	{
+		Move_Time_Pacman +=speed_Pacman *deltaTime ;
+		
+			if(Pacman->position.y < 680)
+			{
+				if(Move_Time_Pacman >= 1)
+				{
+					
+					Pacman-> position.y += 32;
+					Move_Time_Pacman = 0;
+				}
+			}
+
+	}
+	
+	if(PAC_left == true)
+	{
+		Move_Time_Pacman +=speed_Pacman *deltaTime ;
+	
+		if(Pacman->position.x > 40)
 		{
-			if(Move_Time_Pacman >= MaxTime)
-			{	
-			// timer += Speed * deltaTime;
+			if(Move_Time_Pacman >= 1)
+			{
+
 			Pacman-> position.x -= 32;
 			Move_Time_Pacman = 0;
 			}
-		
 		}
+	}
+	if(PAC_right == true)
+	{	
+		Move_Time_Pacman +=speed_Pacman *deltaTime ;
 
-
-		if (input()->getKeyDown(KeyCode::Up)) 
+		if(Pacman->position.x < 1260)
 		{
-		
-			PAC_up = true;
-			PAC_down = false;
-			PAC_right =false;
-			PAC_left = false;
-		}
-
-		if (input()->getKeyDown(KeyCode::Down)) 
-		{
-			
-			PAC_up = false;
-			PAC_down = true;
-			PAC_right =false;
-			PAC_left = false;
-		}
-
-		if (input()->getKeyDown(KeyCode::Left)) 
-		{
-			PAC_up = false;
-			PAC_down = false;
-			PAC_right =false;
-			PAC_left = true;
-		}
-
-		if (input()->getKeyDown(KeyCode::Right)) 
-		{
-			PAC_up = false;
-			PAC_down = false;
-			PAC_right =true;
-			PAC_left = false;
-		}
-
-		if(PAC_up == true)
-		{
-			Move_Time_Pacman +=speed_Pacman *deltaTime ;
-			// if(Can_Move ==true)
-			// {
-				if(Pacman->position.y > 30)
-				{
-					if(Move_Time_Pacman >= 1)
-					{
-					// timer += Speed * deltaTime;
-					Pacman-> position.y -= 32;
-					Move_Time_Pacman = 0;
-					}
-				}
-			// }
-		}
-		
-		if(PAC_down == true)
-		{
-			Move_Time_Pacman +=speed_Pacman *deltaTime ;
-			// if(Can_Move ==true)
-			// {
-				if(Pacman->position.y < 680)
-				{
-				if(Move_Time_Pacman >= 1)
-					{
-					// timer += Speed * deltaTime;
-					Pacman-> position.y += 32;
-					Move_Time_Pacman = 0;
-					}
-				}
-			// }
-		}
-		
-		if(PAC_left == true)
-		{
-			Move_Time_Pacman +=speed_Pacman *deltaTime ;
-			// if(Can_Move ==true)
-			// {
-				if(Pacman->position.x > 40)
-				{
-				if(Move_Time_Pacman >= 1)
-					{
-					// timer += Speed * deltaTime;
-					Pacman-> position.x -= 32;
-					Move_Time_Pacman = 0;
-					}
-				}
-			// }
-			
-		}
-		if(PAC_right == true)
-		{	
-			Move_Time_Pacman +=speed_Pacman *deltaTime ;
-			// if(Can_Move == true)
-			// {
-				if(Pacman->position.x < 1260)
-				{
-					if(Move_Time_Pacman >= 1)
-					{
-					// timer += Speed * deltaTime;
-					Pacman-> position.x += 32;
-					Move_Time_Pacman = 0;
-					}			
-				}
-			// }
-		}
-
-
-		
-			
-		// }
-			// 													GHOST
-	// ___________________________________________________________________________________________________________________________________
-		if (input()->getKeyDown(KeyCode::W)) 
-		{
-			Ghost_up = true;
-			Ghost_down = false;
-			Ghost_right =false;
-			Ghost_left = false;
-		}
-		if (input()->getKeyDown(KeyCode::S)) 
-		{
-			Ghost_up = false;
-			Ghost_down = true;
-			Ghost_right =false;
-			Ghost_left = false;
-			
-		}
-		if (input()->getKeyDown(KeyCode::A)) 
-		{
-			Ghost_up = false;
-			Ghost_down = false;
-			Ghost_right =false;
-			Ghost_left = true;
-		}
-		if (input()->getKeyDown(KeyCode::D)) 
-		{
-			Ghost_up = false;
-			Ghost_down = false;
-			Ghost_right =true;
-			Ghost_left = false;
-		}
-
-		//Collision
-
-		if(Ghost_up == true)
+			if(Move_Time_Pacman >= 1)
 			{
-				if(Ghost->position.y > 30)
-				{
-				// 	moving_Player2= true;
-				// 	// if(Move_Time_Ghost >= 1)
-				// 	// {
-						Ghost-> position.y -= Ghost_Speed* deltaTime;
-						Move_Time_Ghost = 0;
-					// }
-				}
-			}
-			
-			if(Ghost_down == true)
-			{
-				if(Ghost->position.y < 680)
-				{
-					// moving_Player2= true;
-					// if(Move_Time_Ghost >= 1)
-					// {
-						Ghost-> position.y += Ghost_Speed* deltaTime;
-						Move_Time_Ghost = 0;
-					// }
-				}
-			}
-			if(Ghost_left == true)
-			{
-				if(Ghost->position.x > 40)
-				{
-					// moving_Player2= true;
-					// if(Move_Time_Ghost >= 1)
-					// {
-						Ghost-> position.x -= Ghost_Speed* deltaTime;
-						Move_Time_Ghost = 0;
-					// }
-				}
-			}
-			if(Ghost_right == true)
-			{
-				if(Ghost->position.x < 1260)
-				{
-					// moving_Player2= true;
-					// if(Move_Time_Ghost >= 1)
-					// {
-						Ghost-> position.x += Ghost_Speed* deltaTime;
-						Move_Time_Ghost = 0;
-					// }
-				}
-			}
+			Pacman-> position.x += 32;
+			Move_Time_Pacman = 0;
+			}			
+		}
+	}
+}
 
+		
+void Scene_PacLocal::Player2_Move(float deltaTime)
+{
+	if (input()->getKeyDown(KeyCode::W)) 
+	{
+		Ghost_up = true;
+		Ghost_down = false;
+		Ghost_right =false;
+		Ghost_left = false;
+	}
+	if (input()->getKeyDown(KeyCode::S)) 
+	{
+		Ghost_up = false;
+		Ghost_down = true;
+		Ghost_right =false;
+		Ghost_left = false;
+		
+	}
+	if (input()->getKeyDown(KeyCode::A)) 
+	{
+		Ghost_up = false;
+		Ghost_down = false;
+		Ghost_right =false;
+		Ghost_left = true;
+	}
+	if (input()->getKeyDown(KeyCode::D)) 
+	{
+		Ghost_up = false;
+		Ghost_down = false;
+		Ghost_right =true;
+		Ghost_left = false;
+	}
+
+	//Collision
+
+	if(Ghost_up == true)
+	{
+		if(Ghost->position.y > 30)
+		{
+				Ghost-> position.y -= Ghost_Speed* deltaTime;
+				Move_Time_Ghost = 0;
+		}
+	}
+		
+	if(Ghost_down == true)
+	{
+		if(Ghost->position.y < 680)
+		{
+			Ghost-> position.y += Ghost_Speed* deltaTime;
+			Move_Time_Ghost = 0;
+		}
+	}
+	if(Ghost_left == true)
+	{
+		if(Ghost->position.x > 40)
+		{
+
+			Ghost-> position.x -= Ghost_Speed* deltaTime;
+			Move_Time_Ghost = 0;
+		}
+	}
+	if(Ghost_right == true)
+	{
+		if(Ghost->position.x < 1260)
+		{
+
+			Ghost-> position.x += Ghost_Speed* deltaTime;
+			Move_Time_Ghost = 0;
+		}
+	}
+}
 	
+	
+
+void Scene_PacLocal::Game_Reset()
+{
+
+
 	if(lost == true)
 	{
 		if(input()->getKeyDown(KeyCode::Enter))
@@ -390,7 +376,9 @@ void Scene_PacLocal::update(float deltaTime)
 			PAC_down= false;
 			PAC_right= false;
 			PAC_left= false;
-
+			
+			
+			text->position = Point2(50000,500000);
 			// GHOST
 
 			Ghost->position.x = 592;
@@ -404,20 +392,8 @@ void Scene_PacLocal::update(float deltaTime)
 			Reset = false;
 		}
 	}
-	
-	if(timer > 32)
-	{
-		timer = 0;
-	}
-	if(timer == 32)
-	{
-		Can_Move =true;
-	}
-	if(timer < 32)
-	{
-		Can_Move = false;
-	}
 }
+
 
 
 
